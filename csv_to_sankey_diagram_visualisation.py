@@ -19,12 +19,16 @@ import csv
 import argparse
 
 
-def convert_to_pairs(input_file, output_file):
+def convert_to_pairs(input_file, output_file, skiprows):
   with open(input_file, 'r') as infile, open(output_file, 'w', newline='') as outfile:
     reader = csv.reader(infile)
     writer = csv.writer(outfile)
 
-    headers = next(reader)  # Read the header row
+    headers = ''
+    for _ in range(skiprows + 1):
+      headers = next(reader)  # Read the header row
+
+    # headers = next(reader)  # Read the header row
     print("headers: {}".format(headers))
 
     sankey_csv_headers = ["source", "target", "value"]
@@ -88,9 +92,9 @@ def generate_sankey_diagram(input_file):
   fig.show()
 
 
-def main(input_file, output_file):
+def main(input_file, output_file, args):
   print("Input file: {}, Output file: {}".format(input_file, output_file))
-  convert_to_pairs(input_file, output_file)
+  convert_to_pairs(input_file, output_file, args.skiprows)
   generate_sankey_diagram(output_file)
 
 
@@ -100,9 +104,10 @@ if __name__=="__main__":
   parser.add_argument("input_file", help="Input CSV file with the multi-column flow data.")
 
   # Optional argument with default value
-  parser.add_argument('-o', "--output_file", help="Output CSV file containing intermediate Sankey diagram flow data format.", default='output.csv')
+  parser.add_argument('-o', "--output_file", help="Output CSV file containing intermediate Sankey diagram flow data format. (default: output.csv)", default='output.csv')
+  parser.add_argument('-s', "--skiprows", help="How many rows to skip. (default: 0)", default=0, type=int)
   # parser.add_argument('-v', "--verbose", help="Enable verbose output.", default=False)
 
   args = parser.parse_args()
-  main(args.input_file, args.output_file)
+  main(args.input_file, args.output_file, args)
 
