@@ -19,13 +19,14 @@ import csv
 import argparse
 
 
-def convert_to_pairs(input_file, output_file, skiprows):
+def convert_to_pairs(input_file, output_file, options):
+  print("convert_to_paris: {}, {}, {}".format(input_file, output_file, options))
   with open(input_file, 'r') as infile, open(output_file, 'w', newline='') as outfile:
     reader = csv.reader(infile)
     writer = csv.writer(outfile)
 
     headers = ''
-    for _ in range(skiprows + 1):
+    for _ in range(options.skiprows + 1):
       headers = next(reader)  # Read the header row
 
     # headers = next(reader)  # Read the header row
@@ -41,7 +42,12 @@ def convert_to_pairs(input_file, output_file, skiprows):
         # writer.writerow([header[0], header[i], row[0], row[i]])
         print("i-1: {}, i: {}".format(i-1, i))
         print("row[i-1]: {}, row[i]: {}".format(row[i-1], row[i]))
-        writer.writerow([row[i-1], row[i], 1])
+        row1 = row[i-1]
+        row2 = row[i]
+        if options.header_key:
+          row1 = "{}-{}".format(headers[i-1], row[i-1])
+          row2 = "{}-{}".format(headers[i], row[i])
+        writer.writerow([row1, row2, 1])
         counter += 1
 
 
@@ -94,7 +100,7 @@ def generate_sankey_diagram(input_file):
 
 def main(input_file, output_file, args):
   print("Input file: {}, Output file: {}".format(input_file, output_file))
-  convert_to_pairs(input_file, output_file, args.skiprows)
+  convert_to_pairs(input_file, output_file, args)
   generate_sankey_diagram(output_file)
 
 
@@ -104,9 +110,10 @@ if __name__=="__main__":
   parser.add_argument("input_file", help="Input CSV file with the multi-column flow data.")
 
   # Optional argument with default value
-  parser.add_argument('-o', "--output_file", help="Output CSV file containing intermediate Sankey diagram flow data format. (default: output.csv)", default='output.csv')
+  parser.add_argument('-o', "--output-file", help="Output CSV file containing intermediate Sankey diagram flow data format. (default: output.csv)", default='output.csv')
   parser.add_argument('-s', "--skiprows", help="How many rows to skip. (default: 0)", default=0, type=int)
   # parser.add_argument('-v', "--verbose", help="Enable verbose output.", default=False)
+  parser.add_argument('-hk', "--header-key", help="Flag to include the column header name as part of the value. E.g. header-value.", action="store_true")
 
   args = parser.parse_args()
   main(args.input_file, args.output_file, args)
