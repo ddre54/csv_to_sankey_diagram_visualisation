@@ -47,6 +47,12 @@ pip freeze > requirements.txt
 python csv_to_sankey_diagram_visualisation.py data.csv
 ```
 
+### To see options available
+
+```bash
+python csv_to_sankey_diagram_visualisation.py -h
+```
+
 # Examples
 
 With [`examples/more_layers_data.csv`](examples/more_layers_data.csv) as input you'll get something like this:

@@ -26,7 +26,7 @@ def convert_to_pairs(input_file, output_file, options):
     writer = csv.writer(outfile)
 
     headers = ''
-    for _ in range(options.skiprows + 1):
+    for _ in range(options.skip_rows + 1):
       headers = next(reader)  # Read the header row
 
     # headers = next(reader)  # Read the header row
@@ -111,7 +111,7 @@ if __name__=="__main__":
 
   # Optional argument with default value
   parser.add_argument('-o', "--output-file", help="Output CSV file containing intermediate Sankey diagram flow data format. (default: output.csv)", default='output.csv')
-  parser.add_argument('-s', "--skiprows", help="How many rows to skip. (default: 0)", default=0, type=int)
+  parser.add_argument('-sr', "--skip-rows", help="How many rows to skip. (default: 0)", default=0, type=int)
   # parser.add_argument('-v', "--verbose", help="Enable verbose output.", default=False)
   parser.add_argument('-hk', "--header-key", help="Flag to include the column header name as part of the value. E.g. header-value.", action="store_true")
 
