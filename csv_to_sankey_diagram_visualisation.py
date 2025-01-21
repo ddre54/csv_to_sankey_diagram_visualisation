@@ -51,7 +51,7 @@ def convert_to_pairs(input_file, output_file, options):
         counter += 1
 
 
-def generate_sankey_diagram(input_file):
+def generate_sankey_diagram(input_file, args):
   # TODO:
   # - Improve CSV file parsing.
   # - Currently it has issues with supporting files that are not strictly clean up and without spaces between columns
@@ -94,14 +94,15 @@ def generate_sankey_diagram(input_file):
     )
   ))
 
-  fig.update_layout(title_text="Sankey Diagram", font_size=10)
+  # fig.update_layout(title_text="Sankey Diagram", font_size=10)
+  fig.update_layout(title_text=args.input_file, font_size=10)
   fig.show()
 
 
 def main(input_file, output_file, args):
   print("Input file: {}, Output file: {}".format(input_file, output_file))
   convert_to_pairs(input_file, output_file, args)
-  generate_sankey_diagram(output_file)
+  generate_sankey_diagram(output_file, args)
 
 
 if __name__=="__main__":
@@ -113,7 +114,7 @@ if __name__=="__main__":
   parser.add_argument('-o', "--output-file", help="Output CSV file containing intermediate Sankey diagram flow data format. (default: output.csv)", default='output.csv')
   parser.add_argument('-sr', "--skip-rows", help="How many rows to skip. (default: 0)", default=0, type=int)
   # parser.add_argument('-v', "--verbose", help="Enable verbose output.", default=False)
-  parser.add_argument('-hk', "--header-key", help="Flag to include the column header name as part of the value. E.g. header-value.", action="store_true")
+  parser.add_argument('-hk', "--header-key", help="Flag to include the column's header name as part of the node's key. E.g. <header-value>. Without this flag, the node's key is only <value>. If multiple columns have the save value this could help reduce loops.", action="store_true")
 
   args = parser.parse_args()
   main(args.input_file, args.output_file, args)

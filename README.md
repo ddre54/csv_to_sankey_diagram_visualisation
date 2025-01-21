@@ -53,7 +53,22 @@ python csv_to_sankey_diagram_visualisation.py data.csv
 python csv_to_sankey_diagram_visualisation.py -h
 ```
 
-# Examples
+# Usage
+
+```bash
+python csv_to_sankey_diagram_visualisation.py <input_csv_file>
+```
+
+## Script options (`-h` or `--help`)
+```bash
+python csv_to_sankey_diagram_visualisation.py -h
+```
+
+## Examples
+
+```bash
+python csv_to_sankey_diagram_visualisation.py examples/more_layers_data.csv
+```
 
 With [`examples/more_layers_data.csv`](examples/more_layers_data.csv) as input you'll get something like this:
 
